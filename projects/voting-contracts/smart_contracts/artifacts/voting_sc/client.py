@@ -23,19 +23,24 @@ from algosdk.atomic_transaction_composer import (
 
 _APP_SPEC_JSON = r"""{
     "hints": {
-        "hello(string)string": {
+        "create_voting(string)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "get_voting_str()string": {
             "call_config": {
                 "no_op": "CALL"
             }
         }
     },
     "source": {
-        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMudm90aW5nX3NjLmNvbnRyYWN0LlZvdGluZ1NjLmFwcHJvdmFsX3Byb2dyYW06CiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjQKICAgIC8vIGNsYXNzIFZvdGluZ1NjKEFSQzRDb250cmFjdCk6CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9iYXJlX3JvdXRpbmdANQogICAgbWV0aG9kICJoZWxsbyhzdHJpbmcpc3RyaW5nIgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggbWFpbl9oZWxsb19yb3V0ZUAyCiAgICBlcnIgLy8gcmVqZWN0IHRyYW5zYWN0aW9uCgptYWluX2hlbGxvX3JvdXRlQDI6CiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjYKICAgIC8vIEBhcmM0LmFiaW1ldGhvZCgpCiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gaXMgbm90IGNyZWF0aW5nCiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjQKICAgIC8vIGNsYXNzIFZvdGluZ1NjKEFSQzRDb250cmFjdCk6CiAgICB0eG5hIEFwcGxpY2F0aW9uQXJncyAxCiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjYKICAgIC8vIEBhcmM0LmFiaW1ldGhvZCgpCiAgICBjYWxsc3ViIGhlbGxvCiAgICBieXRlIDB4MTUxZjdjNzUKICAgIHN3YXAKICAgIGNvbmNhdAogICAgbG9nCiAgICBpbnQgMQogICAgcmV0dXJuCgptYWluX2JhcmVfcm91dGluZ0A1OgogICAgLy8gc21hcnRfY29udHJhY3RzL3ZvdGluZ19zYy9jb250cmFjdC5weTo0CiAgICAvLyBjbGFzcyBWb3RpbmdTYyhBUkM0Q29udHJhY3QpOgogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIHJlamVjdCB0cmFuc2FjdGlvbgogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgIGFzc2VydCAvLyBpcyBjcmVhdGluZwogICAgaW50IDEKICAgIHJldHVybgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy52b3Rpbmdfc2MuY29udHJhY3QuVm90aW5nU2MuaGVsbG8obmFtZTogYnl0ZXMpIC0+IGJ5dGVzOgpoZWxsbzoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy92b3Rpbmdfc2MvY29udHJhY3QucHk6Ni03CiAgICAvLyBAYXJjNC5hYmltZXRob2QoKQogICAgLy8gZGVmIGhlbGxvKHNlbGYsIG5hbWU6IGFyYzQuU3RyaW5nKSAtPiBhcmM0LlN0cmluZzoKICAgIHByb3RvIDEgMQogICAgLy8gc21hcnRfY29udHJhY3RzL3ZvdGluZ19zYy9jb250cmFjdC5weTo4CiAgICAvLyByZXR1cm4gIkhlbGxvLCAiICsgbmFtZQogICAgZnJhbWVfZGlnIC0xCiAgICBleHRyYWN0IDIgMAogICAgYnl0ZSAiSGVsbG8sICIKICAgIHN3YXAKICAgIGNvbmNhdAogICAgZHVwCiAgICBsZW4KICAgIGl0b2IKICAgIGV4dHJhY3QgNiAwCiAgICBzd2FwCiAgICBjb25jYXQKICAgIHJldHN1Ygo=",
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMudm90aW5nX3NjLmNvbnRyYWN0LlZvdGluZ1NjLmFwcHJvdmFsX3Byb2dyYW06CiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjQKICAgIC8vIGNsYXNzIFZvdGluZ1NjKEFSQzRDb250cmFjdCk6CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9iYXJlX3JvdXRpbmdANgogICAgbWV0aG9kICJjcmVhdGVfdm90aW5nKHN0cmluZyl2b2lkIgogICAgbWV0aG9kICJnZXRfdm90aW5nX3N0cigpc3RyaW5nIgogICAgdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAogICAgbWF0Y2ggbWFpbl9jcmVhdGVfdm90aW5nX3JvdXRlQDIgbWFpbl9nZXRfdm90aW5nX3N0cl9yb3V0ZUAzCiAgICBlcnIgLy8gcmVqZWN0IHRyYW5zYWN0aW9uCgptYWluX2NyZWF0ZV92b3Rpbmdfcm91dGVAMjoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy92b3Rpbmdfc2MvY29udHJhY3QucHk6OAogICAgLy8gQGFyYzQuYWJpbWV0aG9kKCkKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBpcyBub3QgY3JlYXRpbmcKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy92b3Rpbmdfc2MvY29udHJhY3QucHk6NAogICAgLy8gY2xhc3MgVm90aW5nU2MoQVJDNENvbnRyYWN0KToKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDEKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy92b3Rpbmdfc2MvY29udHJhY3QucHk6OAogICAgLy8gQGFyYzQuYWJpbWV0aG9kKCkKICAgIGNhbGxzdWIgY3JlYXRlX3ZvdGluZwogICAgaW50IDEKICAgIHJldHVybgoKbWFpbl9nZXRfdm90aW5nX3N0cl9yb3V0ZUAzOgogICAgLy8gc21hcnRfY29udHJhY3RzL3ZvdGluZ19zYy9jb250cmFjdC5weToxMgogICAgLy8gQGFyYzQuYWJpbWV0aG9kKCkKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBpcyBub3QgY3JlYXRpbmcKICAgIGNhbGxzdWIgZ2V0X3ZvdGluZ19zdHIKICAgIGJ5dGUgMHgxNTFmN2M3NQogICAgc3dhcAogICAgY29uY2F0CiAgICBsb2cKICAgIGludCAxCiAgICByZXR1cm4KCm1haW5fYmFyZV9yb3V0aW5nQDY6CiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjQKICAgIC8vIGNsYXNzIFZvdGluZ1NjKEFSQzRDb250cmFjdCk6CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gcmVqZWN0IHRyYW5zYWN0aW9uCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGlzIGNyZWF0aW5nCiAgICBpbnQgMQogICAgcmV0dXJuCgoKLy8gc21hcnRfY29udHJhY3RzLnZvdGluZ19zYy5jb250cmFjdC5Wb3RpbmdTYy5jcmVhdGVfdm90aW5nKHZvdGluZ19zdHI6IGJ5dGVzKSAtPiB2b2lkOgpjcmVhdGVfdm90aW5nOgogICAgLy8gc21hcnRfY29udHJhY3RzL3ZvdGluZ19zYy9jb250cmFjdC5weTo4LTkKICAgIC8vIEBhcmM0LmFiaW1ldGhvZCgpCiAgICAvLyBkZWYgY3JlYXRlX3ZvdGluZyhzZWxmLCB2b3Rpbmdfc3RyOiBhcmM0LlN0cmluZykgLT4gTm9uZToKICAgIHByb3RvIDEgMAogICAgLy8gc21hcnRfY29udHJhY3RzL3ZvdGluZ19zYy9jb250cmFjdC5weToxMAogICAgLy8gc2VsZi52b3Rpbmdfc3RyID0gdm90aW5nX3N0cgogICAgYnl0ZSAidm90aW5nX3N0ciIKICAgIGZyYW1lX2RpZyAtMQogICAgYXBwX2dsb2JhbF9wdXQKICAgIHJldHN1YgoKCi8vIHNtYXJ0X2NvbnRyYWN0cy52b3Rpbmdfc2MuY29udHJhY3QuVm90aW5nU2MuZ2V0X3ZvdGluZ19zdHIoKSAtPiBieXRlczoKZ2V0X3ZvdGluZ19zdHI6CiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjEyLTEzCiAgICAvLyBAYXJjNC5hYmltZXRob2QoKQogICAgLy8gZGVmIGdldF92b3Rpbmdfc3RyKHNlbGYpIC0+IGFyYzQuU3RyaW5nOgogICAgcHJvdG8gMCAxCiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjE0CiAgICAvLyByZXR1cm4gc2VsZi52b3Rpbmdfc3RyCiAgICBpbnQgMAogICAgYnl0ZSAidm90aW5nX3N0ciIKICAgIGFwcF9nbG9iYWxfZ2V0X2V4CiAgICBhc3NlcnQgLy8gY2hlY2sgdm90aW5nX3N0ciBleGlzdHMKICAgIHJldHN1Ygo=",
         "clear": "I3ByYWdtYSB2ZXJzaW9uIDEwCgpzbWFydF9jb250cmFjdHMudm90aW5nX3NjLmNvbnRyYWN0LlZvdGluZ1NjLmNsZWFyX3N0YXRlX3Byb2dyYW06CiAgICAvLyBzbWFydF9jb250cmFjdHMvdm90aW5nX3NjL2NvbnRyYWN0LnB5OjQKICAgIC8vIGNsYXNzIFZvdGluZ1NjKEFSQzRDb250cmFjdCk6CiAgICBpbnQgMQogICAgcmV0dXJuCg=="
     },
     "state": {
         "global": {
-            "num_byte_slices": 0,
+            "num_byte_slices": 1,
             "num_uints": 0
         },
         "local": {
@@ -45,7 +50,12 @@ _APP_SPEC_JSON = r"""{
     },
     "schema": {
         "global": {
-            "declared": {},
+            "declared": {
+                "voting_str": {
+                    "type": "bytes",
+                    "key": "voting_str"
+                }
+            },
             "reserved": {}
         },
         "local": {
@@ -57,13 +67,20 @@ _APP_SPEC_JSON = r"""{
         "name": "VotingSc",
         "methods": [
             {
-                "name": "hello",
+                "name": "create_voting",
                 "args": [
                     {
                         "type": "string",
-                        "name": "name"
+                        "name": "voting_str"
                     }
                 ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "get_voting_str",
+                "args": [],
                 "returns": {
                     "type": "string"
                 }
@@ -149,12 +166,45 @@ def _convert_deploy_args(
 
 
 @dataclasses.dataclass(kw_only=True)
-class HelloArgs(_ArgsBase[str]):
-    name: str
+class CreateVotingArgs(_ArgsBase[None]):
+    voting_str: str
 
     @staticmethod
     def method() -> str:
-        return "hello(string)string"
+        return "create_voting(string)void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class GetVotingStrArgs(_ArgsBase[str]):
+    @staticmethod
+    def method() -> str:
+        return "get_voting_str()string"
+
+
+class ByteReader:
+    def __init__(self, data: bytes):
+        self._data = data
+
+    @property
+    def as_bytes(self) -> bytes:
+        return self._data
+
+    @property
+    def as_str(self) -> str:
+        return self._data.decode("utf8")
+
+    @property
+    def as_base64(self) -> str:
+        return base64.b64encode(self._data).decode("utf8")
+
+    @property
+    def as_hex(self) -> str:
+        return self._data.hex()
+
+
+class GlobalState:
+    def __init__(self, data: dict[bytes, bytes | int]):
+        self.voting_str = ByteReader(typing.cast(bytes, data.get(b"voting_str")))
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -188,21 +238,40 @@ class Composer:
     def execute(self) -> AtomicTransactionResponse:
         return self.app_client.execute_atc(self.atc)
 
-    def hello(
+    def create_voting(
         self,
         *,
-        name: str,
+        voting_str: str,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> "Composer":
-        """Adds a call to `hello(string)string` ABI method
+        """Adds a call to `create_voting(string)void` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param str voting_str: The `voting_str` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns Composer: This Composer instance"""
 
-        args = HelloArgs(
-            name=name,
+        args = CreateVotingArgs(
+            voting_str=voting_str,
         )
+        self.app_client.compose_call(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def get_voting_str(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `get_voting_str()string` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = GetVotingStrArgs()
         self.app_client.compose_call(
             self.atc,
             call_abi_method=args.method(),
@@ -370,21 +439,45 @@ class VotingScClient:
     def suggested_params(self, value: algosdk.transaction.SuggestedParams | None) -> None:
         self.app_client.suggested_params = value
 
-    def hello(
+    def get_global_state(self) -> GlobalState:
+        """Returns the application's global state wrapped in a strongly typed class with options to format the stored value"""
+
+        state = typing.cast(dict[bytes, bytes | int], self.app_client.get_global_state(raw=True))
+        return GlobalState(state)
+
+    def create_voting(
         self,
         *,
-        name: str,
+        voting_str: str,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `create_voting(string)void` ABI method
+        
+        :param str voting_str: The `voting_str` ABI parameter
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = CreateVotingArgs(
+            voting_str=voting_str,
+        )
+        result = self.app_client.call(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
+    def get_voting_str(
+        self,
+        *,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> algokit_utils.ABITransactionResponse[str]:
-        """Calls `hello(string)string` ABI method
+        """Calls `get_voting_str()string` ABI method
         
-        :param str name: The `name` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns algokit_utils.ABITransactionResponse[str]: The result of the transaction"""
 
-        args = HelloArgs(
-            name=name,
-        )
+        args = GetVotingStrArgs()
         result = self.app_client.call(
             call_abi_method=args.method(),
             transaction_parameters=_convert_call_transaction_parameters(transaction_parameters),

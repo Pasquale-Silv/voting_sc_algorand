@@ -28,9 +28,21 @@ def deploy(
         on_schema_break=algokit_utils.OnSchemaBreak.AppendApp,
         on_update=algokit_utils.OnUpdate.AppendApp,
     )
-    name = "world"
-    response = app_client.hello(name=name)
+
+    voting_str = "Cheese"
+    logger.info(f"Calling 'create_voting' with parameter '{voting_str}'...")
+    app_client.create_voting(voting_str=voting_str)
+
+    logger.info("Retrieving the Global State of the SC...")
+    voting_global_state = app_client.get_global_state()
+    logger.info(voting_global_state)
+    logger.info(voting_global_state.voting_str)
+    logger.info(voting_global_state.voting_str.as_str)
+
+    logger.info("Calling 'get_voting_str'...")
+    response = app_client.get_voting_str()
     logger.info(
-        f"Called hello on {app_spec.contract.name} ({app_client.app_id}) "
-        f"with name={name}, received: {response.return_value}"
+        f"Response: "
+        f"'{response}'"
+        f"\nOnly with the return value from response: '{response.return_value}'"
     )

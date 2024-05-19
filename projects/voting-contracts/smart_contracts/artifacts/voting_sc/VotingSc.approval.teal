@@ -4,14 +4,15 @@ smart_contracts.voting_sc.contract.VotingSc.approval_program:
     // smart_contracts/voting_sc/contract.py:4
     // class VotingSc(ARC4Contract):
     txn NumAppArgs
-    bz main_bare_routing@5
-    method "hello(string)string"
+    bz main_bare_routing@6
+    method "create_voting(string)void"
+    method "get_voting_str()string"
     txna ApplicationArgs 0
-    match main_hello_route@2
+    match main_create_voting_route@2 main_get_voting_str_route@3
     err // reject transaction
 
-main_hello_route@2:
-    // smart_contracts/voting_sc/contract.py:6
+main_create_voting_route@2:
+    // smart_contracts/voting_sc/contract.py:8
     // @arc4.abimethod()
     txn OnCompletion
     !
@@ -21,9 +22,21 @@ main_hello_route@2:
     // smart_contracts/voting_sc/contract.py:4
     // class VotingSc(ARC4Contract):
     txna ApplicationArgs 1
-    // smart_contracts/voting_sc/contract.py:6
+    // smart_contracts/voting_sc/contract.py:8
     // @arc4.abimethod()
-    callsub hello
+    callsub create_voting
+    int 1
+    return
+
+main_get_voting_str_route@3:
+    // smart_contracts/voting_sc/contract.py:12
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is NoOp
+    txn ApplicationID
+    assert // is not creating
+    callsub get_voting_str
     byte 0x151f7c75
     swap
     concat
@@ -31,7 +44,7 @@ main_hello_route@2:
     int 1
     return
 
-main_bare_routing@5:
+main_bare_routing@6:
     // smart_contracts/voting_sc/contract.py:4
     // class VotingSc(ARC4Contract):
     txn OnCompletion
@@ -44,23 +57,30 @@ main_bare_routing@5:
     return
 
 
-// smart_contracts.voting_sc.contract.VotingSc.hello(name: bytes) -> bytes:
-hello:
-    // smart_contracts/voting_sc/contract.py:6-7
+// smart_contracts.voting_sc.contract.VotingSc.create_voting(voting_str: bytes) -> void:
+create_voting:
+    // smart_contracts/voting_sc/contract.py:8-9
     // @arc4.abimethod()
-    // def hello(self, name: arc4.String) -> arc4.String:
-    proto 1 1
-    // smart_contracts/voting_sc/contract.py:8
-    // return "Hello, " + name
+    // def create_voting(self, voting_str: arc4.String) -> None:
+    proto 1 0
+    // smart_contracts/voting_sc/contract.py:10
+    // self.voting_str = voting_str
+    byte "voting_str"
     frame_dig -1
-    extract 2 0
-    byte "Hello, "
-    swap
-    concat
-    dup
-    len
-    itob
-    extract 6 0
-    swap
-    concat
+    app_global_put
+    retsub
+
+
+// smart_contracts.voting_sc.contract.VotingSc.get_voting_str() -> bytes:
+get_voting_str:
+    // smart_contracts/voting_sc/contract.py:12-13
+    // @arc4.abimethod()
+    // def get_voting_str(self) -> arc4.String:
+    proto 0 1
+    // smart_contracts/voting_sc/contract.py:14
+    // return self.voting_str
+    int 0
+    byte "voting_str"
+    app_global_get_ex
+    assert // check voting_str exists
     retsub
