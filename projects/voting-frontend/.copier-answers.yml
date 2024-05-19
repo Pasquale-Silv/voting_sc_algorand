@@ -1,0 +1,9 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 1.0.5
+_src_path: gh:algorandfoundation/algokit-react-frontend-template
+author_email: 55320885+Pasquale-Silv@users.noreply.github.com
+author_name: Pasquale.Silv
+cloud_provider: none
+preset_name: production
+project_name: voting-frontend
+

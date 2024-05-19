@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.vscode/**'
+      - '.idea/**'
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  voting-contracts-validate:
+    name: Run voting-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/voting-contracts-ci.yaml
+
+  voting-contracts-release:
+    name: Run voting-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/voting-contracts-cd.yaml
+    needs: voting-contracts-validate
+
+  voting-frontend-validate:
+    name: Run voting-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/voting-frontend-ci.yaml
+
+  voting-frontend-release:
+    name: Run voting-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/voting-frontend-cd.yaml
+    needs: voting-frontend-validate

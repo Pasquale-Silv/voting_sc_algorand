@@ -1,0 +1,14 @@
+name: Pull Request validation
+
+on: [pull_request]
+
+
+jobs:
+  voting-contracts-ci:
+    name: Run voting-contracts validation
+    uses: ./.github/workflows/voting-contracts-ci.yaml
+
+  voting-frontend-ci:
+    name: Run voting-frontend validation
+    uses: ./.github/workflows/voting-frontend-ci.yaml
+
