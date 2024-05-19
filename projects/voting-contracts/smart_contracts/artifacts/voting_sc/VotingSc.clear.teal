@@ -1,0 +1,7 @@
+#pragma version 10
+
+smart_contracts.voting_sc.contract.VotingSc.clear_state_program:
+    // smart_contracts/voting_sc/contract.py:4
+    // class VotingSc(ARC4Contract):
+    int 1
+    return
